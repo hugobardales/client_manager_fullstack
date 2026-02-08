@@ -1,0 +1,36 @@
+services:
+  clientmanager-db:
+    image: mariadb:10.11
+    container_name: clientmanager_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: client_manager_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3307:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - crm-network
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+  clientmanager-adminer:
+    image: adminer
+    container_name: clientmanager_adminer
+    restart: always
+    ports:
+      - "8082:8080"
+    networks:
+      - crm-network
+    depends_on:
+      - databridge-db
+networks:
+  crm-network:
+    driver: bridge
+volumes:
+  mariadb_data:
