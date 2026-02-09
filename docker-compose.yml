@@ -3,10 +3,10 @@ services:
     image: mariadb:10.11
     container_name: clientmanager_db
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: client_manager_db
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     ports:
       - "3307:3306"
     volumes:
@@ -28,7 +28,7 @@ services:
     networks:
       - crm-network
     depends_on:
-      - databridge-db
+      - clientmanager-db
 networks:
   crm-network:
     driver: bridge
